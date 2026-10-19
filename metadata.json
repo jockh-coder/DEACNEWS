@@ -1,0 +1,7 @@
+{
+  "name": "Decathlon Digital - Transformation Cloud Computing",
+  "description": "Grand format éditorial explorant l'architecture multi-cloud, le serverless, la supply chain RFID et le Green IT chez Decathlon.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
