@@ -20,11 +20,11 @@ import {
   ZoomIn
 } from 'lucide-react';
 
-// Image assets generated in parallel batch
-const HERO_IMAGE = '/src/assets/images/hero_decathlon_cloud_1792405928455.jpg';
-const RFID_LOGISTICS_IMAGE = '/src/assets/images/decathlon_rfid_logistics_1792405929324.jpg';
-const STORE_TECH_IMAGE = '/src/assets/images/decathlon_store_tech_1792405929396.jpg';
-const GREEN_CLOUD_IMAGE = '/src/assets/images/decathlon_green_cloud_1792405930105.jpg';
+// Image assets bundled and hashed by Vite for production
+import HERO_IMAGE from './assets/images/hero_decathlon_cloud_1792405928455.jpg';
+import RFID_LOGISTICS_IMAGE from './assets/images/decathlon_rfid_logistics_1792405929324.jpg';
+import STORE_TECH_IMAGE from './assets/images/decathlon_store_tech_1792405929396.jpg';
+import GREEN_CLOUD_IMAGE from './assets/images/decathlon_green_cloud_1792405930105.jpg';
 
 export default function App() {
   const [scrollProgress, setScrollProgress] = useState(0);

@@ -1,0 +1,31 @@
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const PORT = parseInt(process.env.PORT || '3000', 10);
+
+const distPath = path.join(__dirname, 'dist');
+
+// Serve static assets from the Vite build directory
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  
+  // SPA fallback for all web routes
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+} else {
+  // If dist doesn't exist yet, show friendly guidance
+  app.get('*', (_req, res) => {
+    res.status(200).send('Application is compiling. Please run "npm run build".');
+  });
+}
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server ready on port ${PORT}`);
+});

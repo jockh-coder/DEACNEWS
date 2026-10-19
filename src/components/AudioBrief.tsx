@@ -13,16 +13,20 @@ export const AudioBrief: React.FC = () => {
   useEffect(() => {
     if (isPlaying) {
       // Try Web Speech API if supported in French
-      if ('speechSynthesis' in window && !isMuted) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(digestText);
-        utterance.lang = 'fr-FR';
-        utterance.rate = 1.0;
-        utterance.onend = () => {
-          setIsPlaying(false);
-          setProgress(duration);
-        };
-        window.speechSynthesis.speak(utterance);
+      try {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window && !isMuted) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(digestText);
+          utterance.lang = 'fr-FR';
+          utterance.rate = 1.0;
+          utterance.onend = () => {
+            setIsPlaying(false);
+            setProgress(duration);
+          };
+          window.speechSynthesis.speak(utterance);
+        }
+      } catch (err) {
+        console.warn('SpeechSynthesis unavailable:', err);
       }
 
       timerRef.current = window.setInterval(() => {
@@ -36,15 +40,23 @@ export const AudioBrief: React.FC = () => {
       }, 1000);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+      try {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+      } catch (err) {
+        console.warn('SpeechSynthesis cancel error:', err);
       }
     }
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+      try {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+      } catch (err) {
+        console.warn('SpeechSynthesis cleanup error:', err);
       }
     };
   }, [isPlaying, isMuted]);
@@ -56,7 +68,13 @@ export const AudioBrief: React.FC = () => {
   const handleReset = () => {
     setIsPlaying(false);
     setProgress(0);
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    try {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    } catch (err) {
+      console.warn('SpeechSynthesis reset error:', err);
+    }
   };
 
   const formatTime = (seconds: number) => {

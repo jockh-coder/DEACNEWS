@@ -32,10 +32,16 @@ export const GitHubEcosystem: React.FC = () => {
     ? DECATHLON_GITHUB_REPOS 
     : DECATHLON_GITHUB_REPOS.filter(r => r.category === selectedCategory);
 
-  const handleCopyYaml = () => {
-    navigator.clipboard.writeText(SAMPLE_WORKFLOW_YML);
-    setCopiedYaml(true);
-    setTimeout(() => setCopiedYaml(false), 2000);
+  const handleCopyYaml = async () => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(SAMPLE_WORKFLOW_YML);
+        setCopiedYaml(true);
+        setTimeout(() => setCopiedYaml(false), 2000);
+      }
+    } catch (err) {
+      console.warn('Clipboard copy failed:', err);
+    }
   };
 
   const getLanguageColor = (lang: string) => {
